@@ -1,0 +1,23 @@
+# file            tlmgr-package     (checked by scripts/check-tex.sh, installed by install-tex.sh)
+book.cls          latex
+fancyhdr.sty      fancyhdr
+natbib.sty        natbib
+epigraph.sty      epigraph
+comment.sty       comment
+enumitem.sty      enumitem
+setspace.sty      setspace
+titlesec.sty      titlesec
+subcaption.sty    caption
+booktabs.sty      booktabs
+multirow.sty      multirow
+xcolor.sty        xcolor
+tikz.sty          pgf
+pgfplots.sty      pgfplots
+algorithm.sty     algorithms
+algpseudocode.sty algorithmicx
+listings.sty      listings
+microtype.sty     microtype
+lmodern.sty       lm
+float.sty         float
+hyperref.sty      hyperref
+makeidx.sty       latex

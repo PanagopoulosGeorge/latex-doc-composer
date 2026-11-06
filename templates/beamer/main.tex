@@ -1,0 +1,82 @@
+%% =====================================================================
+%% Slides template (beamer) for talks and defences.
+%% Rules of thumb: one message per slide, stated in the frame title as a
+%% sentence; ~1 slide per minute; numbers on slides must match the document.
+%% =====================================================================
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme{default}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{booktabs}
+\graphicspath{{figures/}}
+
+\title{\textbf{Title of the Talk}}
+\subtitle{Event or Degree}
+\author{Author Name}
+\institute{Institution}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Problem}
+\begin{frame}{The problem in one sentence goes here}
+  \begin{itemize}
+    \item Why it matters
+    \item What is missing today
+  \end{itemize}
+\end{frame}
+
+\section{Approach}
+\begin{frame}{Our approach does X by Y}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item Step 1
+        \item Step 2
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \centering\fbox{\parbox[c][3cm][c]{0.9\linewidth}{\centering Diagram}}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\section{Results}
+\begin{frame}{Headline result stated as a claim}
+  \centering
+  \begin{tabular}{lrr}
+    \toprule
+    Method & Metric A & Metric B \\
+    \midrule
+    Baseline & 0.00 & 0.00 \\
+    Ours     & \alert{0.00} & \alert{0.00} \\
+    \bottomrule
+  \end{tabular}
+\end{frame}
+
+\section{Conclusion}
+\begin{frame}{Take-aways}
+  \begin{enumerate}
+    \item Answer to the research question
+    \item Main limitation
+    \item Next step
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \centering\Large Questions?
+\end{frame}
+
+\end{document}

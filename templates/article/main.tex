@@ -1,0 +1,57 @@
+%% =====================================================================
+%% Article / paper template (latex-doc-composer)
+%% Structure follows the IMRaD pattern used by most venues. If you target
+%% a venue, replace \documentclass with the venue's class and keep the body.
+%% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage[square,numbers,sort&compress]{natbib}
+\graphicspath{{figures/}}
+
+\newcommand{\todo}[1]{\textcolor{red}{[\textbf{TODO:} #1]}}
+
+\usepackage[hidelinks]{hyperref}   % load last
+
+\title{\todo{Title}}
+\author{Author Name\\ \small Affiliation \\ \small\texttt{email@example.org}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+%% context -> gap -> what you did -> main result -> implication. No citations.
+\todo{Abstract, 150--250 words.}
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+%% Problem, why it matters, gap, contribution list, paper outline.
+\todo{Introduction.}
+
+\section{Background and Related Work}\label{sec:related}
+%% Group by approach; end each group with how your work differs.
+\todo{Related work~\cite{lamport1994latex}.}
+
+\section{Method}\label{sec:method}
+\todo{Method.}
+
+\section{Evaluation}\label{sec:evaluation}
+%% Setup -> results (answer first, then evidence) -> threats to validity.
+\todo{Evaluation.}
+
+\section{Conclusion}\label{sec:conclusion}
+\todo{Answer the question; limitations; future work.}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

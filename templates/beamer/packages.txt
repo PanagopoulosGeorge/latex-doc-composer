@@ -1,0 +1,4 @@
+# file            tlmgr-package
+beamer.cls        beamer
+booktabs.sty      booktabs
+lmodern.sty       lm

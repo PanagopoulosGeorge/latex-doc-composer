@@ -1,0 +1,43 @@
+\chapter{Methodology}\label{ch:method}
+%% ---------------------------------------------------------------------
+%% PURPOSE: describe your approach precisely enough that a competent
+%% reader could reimplement it.
+%%
+%% Rules of thumb:
+%%   - Start with an overview figure and one paragraph walking through it.
+%%   - Then one section per component, in the order data flows through them.
+%%   - For each design decision, state the alternative and why you rejected it.
+%%   - Use the running example from the background chapter.
+%%   - Separate WHAT the method does from HOW you implemented it
+%%     (implementation details: a section at the end, or an appendix).
+%%   - Pseudocode (algorithm environment) for anything with a loop.
+%% ---------------------------------------------------------------------
+
+\section{Overview}\label{sec:overview}
+\todo{Overview figure + walkthrough.}
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\parbox[c][4cm][c]{0.7\textwidth}{\centering Overview diagram goes here}}
+  \caption{Overview of the approach. \todo{A caption should be readable without the text.}}
+  \label{fig:overview}
+\end{figure}
+
+\section{\todo{Component 1}}\label{sec:component-1}
+\todo{Describe the component.}
+
+\begin{algorithm}[htbp]
+  \caption{\todo{Algorithm name}}\label{alg:main}
+  \begin{algorithmic}[1]
+    \Require input $x$
+    \Ensure output $y$
+    \State $y \gets x$
+    \While{not converged}
+      \State refine $y$
+    \EndWhile
+    \State \Return $y$
+  \end{algorithmic}
+\end{algorithm}
+
+\section{Implementation}\label{sec:implementation}
+\todo{Languages, libraries, versions, hardware. Link to the code.}

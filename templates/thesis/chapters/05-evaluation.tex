@@ -1,0 +1,49 @@
+\chapter{Evaluation}\label{ch:evaluation}
+%% ---------------------------------------------------------------------
+%% PURPOSE: provide the evidence for each contribution claimed in the
+%% introduction. An examiner will check every claim against this chapter.
+%%
+%% Structure:
+%%   1. Research questions / hypotheses - restate them, numbered (RQ1..).
+%%   2. Setup - datasets, baselines, metrics, parameters, hardware. Enough to
+%%      reproduce. Justify each metric: what does a high value mean?
+%%   3. Results - one section per RQ. Each starts with the answer, then the
+%%      evidence (table/figure), then the interpretation.
+%%   4. Discussion & threats to validity - what could make the results wrong
+%%      (internal, external, construct validity). Name the limits honestly.
+%%
+%% Rules of thumb:
+%%   - Report numbers once, in one place (a table), and refer to it. If a
+%%     number is repeated in the text, abstract or slides it MUST match.
+%%   - Say what the result means, not only what it is.
+%%   - Match claim strength to evidence: measured > analytic > anecdotal.
+%%   - Report variance / multiple runs when results are stochastic.
+%% ---------------------------------------------------------------------
+
+\section{Research Questions}\label{sec:rqs}
+\begin{description}
+  \item[RQ1] \todo{...}
+  \item[RQ2] \todo{...}
+\end{description}
+
+\section{Experimental Setup}\label{sec:setup}
+\todo{Datasets, baselines, metrics, configuration.}
+
+\section{Results}\label{sec:results}
+\begin{table}[htbp]
+  \centering
+  \caption{Main results. \todo{Metric definition; best value in bold.}}
+  \label{tab:main-results}
+  \begin{tabular}{lrr}
+    \toprule
+    Method & Metric A $\uparrow$ & Metric B $\downarrow$ \\
+    \midrule
+    Baseline       & 0.00 & 0.00 \\
+    \textbf{Ours}  & \textbf{0.00} & \textbf{0.00} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+\todo{Answer RQ1, citing \autoref{tab:main-results}.}
+
+\section{Threats to Validity}\label{sec:threats}
+\todo{Internal, external and construct validity.}

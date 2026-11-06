@@ -1,0 +1,107 @@
+%% =====================================================================
+%% Thesis master file (latex-doc-composer template)
+%% Build:   ../../scripts/build.sh .      (or `make build D=docs/<name>`)
+%% Edit metadata (title, author, supervisor...) in metadata.tex.
+%% Class options: greek, oneside   e.g. \documentclass[greek]{thesis}
+%% =====================================================================
+\documentclass{thesis}
+
+%% ---- Encoding & fonts ------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+%% ---- Layout ----------------------------------------------------------
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{titlesec}
+\titlespacing{\subsection}{0pt}{1ex minus .2ex}{0.8ex}
+
+%% ---- Floats, tables, figures ----------------------------------------
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\graphicspath{{figures/}}
+
+%% ---- Algorithms & code ----------------------------------------------
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{thesis}{
+  backgroundcolor=\color{backcolour}, commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta}, numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple}, basicstyle=\ttfamily\footnotesize,
+  breaklines=true, captionpos=b, keepspaces=true, numbers=left,
+  numbersep=5pt, showstringspaces=false, tabsize=2}
+\lstset{style=thesis}
+
+%% ---- Index -----------------------------------------------------------
+\usepackage{makeidx}
+\makeindex
+
+%% ---- Float placement tuning ----------------------------------------
+\renewcommand{\topfraction}{0.8}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\figwidth}{0.75\textwidth}
+\setcounter{secnumdepth}{3}
+
+%% ---- Project files ---------------------------------------------------
+\input{metadata}
+\input{macros}
+
+%% ---- hyperref last ---------------------------------------------------
+%% Use \autoref{label} to get ``Chapter 2'', ``Table 3.1'' etc.
+\usepackage[hidelinks]{hyperref}
+\renewcommand{\chapterautorefname}{Chapter}
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Section}
+\renewcommand{\appendixautorefname}{Appendix}
+\newcommand{\algorithmautorefname}{Algorithm}
+
+\begin{document}
+
+\pagestyle{empty}
+\makemytitlepage
+\makemycopyrightpage
+\makemysignaturespage
+\makemydeclarationpage
+\normalsize
+
+\input{frontmatter/acknowledgements}
+\input{frontmatter/abstract}
+
+\pagestyle{fancy}
+\afterpreface            % table of contents + list of figures
+\input{frontmatter/acronyms}
+
+\mainmatter
+\pagestyle{fancy}
+
+\input{chapters/01-introduction}
+\input{chapters/02-background}
+\input{chapters/03-related-work}
+\input{chapters/04-method}
+\input{chapters/05-evaluation}
+\input{chapters/06-conclusions}
+
+\appendix
+\input{appendix/appendix-a}
+
+\backmatter
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\printindex
+
+\end{document}

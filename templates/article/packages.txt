@@ -1,0 +1,9 @@
+# file            tlmgr-package
+geometry.sty      geometry
+natbib.sty        natbib
+booktabs.sty      booktabs
+subcaption.sty    caption
+xcolor.sty        xcolor
+microtype.sty     microtype
+lmodern.sty       lm
+hyperref.sty      hyperref
