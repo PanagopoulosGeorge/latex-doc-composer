@@ -13,25 +13,77 @@ You don't need to know how LaTeX is installed or compiled to use it.
 
 ---
 
+## 0. What you need on your computer
+
+You don't need LaTeX installed: the setup gets it for you. You need:
+
+**depending on your system:**
+
+| Your system | Install this first | How |
+|---|---|---|
+| **Windows 10/11** | Docker Desktop | [Docker Desktop](https://www.docker.com/products/docker-desktop/) (accept the "WSL 2" option during install and restart if asked), then [Git for Windows](https://git-scm.com/download/win) |
+| **macOS** | Apple's command-line tools (gives you `git` and `make`) | Run `xcode-select --install` in Terminal. Docker Desktop is optional. |
+| **Linux** | git, make, perl, curl, tar, xz | Ubuntu/Debian: `sudo apt install git make perl curl tar xz-utils`. Fedora: `sudo dnf install git make perl curl tar xz`. Docker is optional. |
+
+**Disk space**
+- Docker route: about 3 GB in total (Docker Desktop itself, plus the ~900 MB LaTeX image).
+- Native route (macOS/Linux without Docker): about 300 MB, all inside your home folder.
+
+You don't need an administrator password on macOS or Linux. Windows needs one only to install Docker Desktop.
+
+**Check that you're ready:** open a terminal (Windows: PowerShell) and run:
+```bash
+git --version
+docker --version      # only for the Docker route; Docker Desktop must be running
+```
+If each command prints a version number, you're ready.
+
+---
+
 ## 1. Setup (once per computer)
 
-You need **macOS or Linux** with `git`. On **Windows**, use WSL (Windows Subsystem for Linux) and follow the Linux steps. See [Windows](#windows).
-
+Get the project first (with git, or download it as a ZIP and unzip it):
 ```bash
 git clone <repo-url> latex-doc-composer
 cd latex-doc-composer
+```
+Then pick **one** of the two ways to run it:
+
+| | **A. Docker** (any OS) | **B. Native** (macOS / Linux) |
+|---|---|---|
+| Works on | Windows, macOS, Linux | macOS, Linux (and Windows via WSL) |
+| You install | [Docker Desktop](https://www.docker.com/products/docker-desktop/) (see section 0) | only the basic tools from section 0; `make setup` installs LaTeX |
+| Commands | `./dmake build ...` (Windows: `dmake build ...`) | `make build ...` |
+| Best for | Windows; identical setup for everyone | Fastest builds; using LaTeX from your editor |
+
+### A. Docker (Windows, macOS, Linux)
+1. Install and start [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+2. In the project folder, run one command:
+   - **Windows** (PowerShell or Command Prompt): `.\dmake check`
+   - **macOS / Linux**: `./dmake check`
+
+The first run builds the LaTeX image (~900 MB on disk), which takes a few minutes. It contains everything: TinyTeX, every package, latexmk and latexdiff. After that, every command in this README works the same, with `make` replaced by `dmake`. For example, `.\dmake build D=docs/my-thesis` on Windows.
+
+Your files stay in the project folder on your computer; the container only compiles them. Edit them with any editor. Two limits:
+- Documents must be inside the project folder.
+- Git commands (`git add`, `git commit`) run on your own computer, as usual. On Windows, install [Git for Windows](https://git-scm.com/download/win). For a shell inside the container, use `dmake shell`.
+
+### B. Native (macOS, Linux)
+```bash
 make setup
 ```
-
 `make setup` checks your computer and:
 - **If LaTeX isn't installed**: downloads [TinyTeX](https://yihui.org/tinytex/), a small TeX Live distribution (~120 MB download). It installs into your home folder, so no administrator password is needed. Then it adds every package the templates use.
 - **If you already have LaTeX** (MacTeX, BasicTeX, TeX Live): it installs only the missing packages. If your LaTeX is a system-wide install, it prints one `sudo tlmgr install ...` line for you to run.
+- **If a basic tool is missing** (common on minimal Linux): it prints the `apt`/`dnf`/`pacman` command to install it.
 
 Re-running it is safe. When it finishes, it says `setup complete`.
 
 To also use `pdflatex` directly in your own terminal or editor (VS Code, TeXstudio), run `scripts/setup.sh --add-path` and open a new terminal. The scripts in this repo don't need this.
 
 **Prefer a full LaTeX installation?** `scripts/install-tex.sh --profile full` shows the commands for MacTeX or `texlive-full` (5–7 GB, needs admin).
+
+**Windows without Docker:** install WSL (`wsl --install` in PowerShell as administrator, then restart), open the Ubuntu terminal, and follow these native steps.
 
 ---
 
@@ -62,7 +114,7 @@ docs/my-thesis/
 ```
 Each chapter file starts with a comment block (it doesn't appear in the PDF) explaining what the chapter should do. Rename, add or remove chapters freely; just update the `\input{...}` lines in `main.tex`.
 
-Class options go in the first line of `main.tex`: `\documentclass[greek]{thesis}` adds Greek language support, and `oneside` gives single-sided printing.
+Class options go in the first line of `main.tex`: `\documentclass[greek]{thesis}` adds Greek (hyphenation, fonts, and typing Greek directly, e.g. `\begin{otherlanguage}{greek}...\end{otherlanguage}`), and `oneside` gives single-sided printing.
 
 ---
 
@@ -133,6 +185,8 @@ The writing guidance the assistant follows is readable on its own too: [academic
 
 ## Command reference
 
+With Docker, replace `make` with `./dmake` (macOS/Linux) or `dmake` (Windows).
+
 | Command | What it does |
 |---|---|
 | `make setup` | Install LaTeX (if needed) and all required packages |
@@ -152,7 +206,10 @@ All of these are short wrappers around the scripts in `scripts/`; the comment at
 
 | Problem | Fix |
 |---|---|
-| `make: command not found` | macOS: `xcode-select --install`. Ubuntu: `sudo apt install make` |
+| `make: command not found` | macOS: `xcode-select --install`. Ubuntu: `sudo apt install make`. Windows: use `dmake` (Docker) |
+| `Docker is installed but not running` | Start Docker Desktop and wait until it says "running" |
+| Docker: `bash\r` or `$'\r': command not found` | The files got Windows line endings. Re-clone with `git clone --config core.autocrlf=false <repo-url>` |
+| Docker: a package is missing | Builds auto-install it for that run. To keep it, add it to the template's `packages.txt` and rebuild the image: `docker compose build` |
 | `latexmk: command not found` after setup | Run `make setup` again from inside the repo; or `scripts/setup.sh --add-path` and open a new terminal |
 | `File 'x.sty' not found` | With TinyTeX it installs automatically. Otherwise run the `sudo tlmgr install ...` line printed |
 | Strange errors after an aborted build | `make clean D=<folder>`, then build again |
@@ -161,10 +218,6 @@ All of these are short wrappers around the scripts in `scripts/`; the comment at
 | The diff PDF fails or looks odd around tables or equations | See the options in [latex-diff](.claude/skills/latex-diff/SKILL.md) |
 | `release` says "uncommitted changes" | `git add -A && git commit -m "..."` first, so the version matches the PDF |
 
-### Windows
-Install WSL (`wsl --install` in PowerShell as administrator, then restart), open the Ubuntu terminal, and follow the Linux steps. You can edit files from Windows with VS Code and its WSL extension.
-If you'd rather stay in native Windows, install [MiKTeX](https://miktex.org/), which downloads packages on demand, and compile `main.tex` from your editor. You'll lose the version and diff commands, which need bash.
-
 ---
 
 ## Repository layout
@@ -172,6 +225,8 @@ If you'd rather stay in native Windows, install [MiKTeX](https://miktex.org/), w
 templates/   thesis · article · beamer  (copied by `make new`)
 docs/        your documents
 scripts/     setup, build, release, diff, check
+dmake        run any make command inside Docker (dmake.cmd on Windows)
+Dockerfile   the Docker LaTeX image (TinyTeX + all template packages)
 .claude/     AI assistant skills and reviewer agents (optional)
 ```
 

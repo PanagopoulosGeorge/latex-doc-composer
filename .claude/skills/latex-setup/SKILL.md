@@ -14,6 +14,12 @@ scripts/setup.sh          # or: make setup
 - The repo scripts find TinyTeX even if it isn't on PATH. `--add-path` also adds it to `~/.zshrc`/`~/.bashrc` for the user's own terminal and editor.
 - `scripts/build.sh` **auto-installs** missing packages when the TeX tree is user-writable (TinyTeX), then retries. On a system TeX it prints the install command. `AUTO_INSTALL=0` disables this.
 
+## Docker alternative (any OS, required route on native Windows)
+`./dmake <target>` (`dmake <target>` on Windows) runs `make <target>` in the image built from `Dockerfile` (TinyTeX + all `packages.txt` packages). The first run builds the image.
+- Docker must be running (`docker info`).
+- Paths passed as `D=` must be inside the repo, since only the repo is mounted at `/work`.
+- A missing package is auto-installed for that run only. For a permanent fix, add it to `packages.txt` and run `docker compose build`.
+
 ## 1. Diagnose first
 ```bash
 scripts/check-tex.sh                 # tools + packages for all templates

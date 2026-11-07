@@ -89,8 +89,8 @@ find_main() {
 log_errors() {
   local log="$1"
   [ -f "$log" ] || return 0
-  grep -n -E '^[^ ]+\.tex:[0-9]+:|^! ' "$log" | head -20 || true
-  grep -E 'Citation .* undefined|Reference .* undefined' "$log" | sort -u | head -10
+  LC_ALL=C grep -n -E '^[^ ]+\.(tex|sty|cls|def|ldf):[0-9]+:|^! ' "$log" | head -20 || true
+  LC_ALL=C grep -E 'Citation .* undefined|Reference .* undefined' "$log" | LC_ALL=C sort -u | head -10
   return 0
 }
 

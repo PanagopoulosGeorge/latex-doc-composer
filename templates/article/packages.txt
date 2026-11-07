@@ -7,3 +7,4 @@ xcolor.sty        xcolor
 microtype.sty     microtype
 lmodern.sty       lm
 hyperref.sty      hyperref
+colortbl.sty      colortbl

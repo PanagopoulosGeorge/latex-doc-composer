@@ -20,7 +20,7 @@ EXTRA=()
 for a in "$@"; do
   case "$a" in
     --clean) info "cleaning"; latexmk -C ${EXTRA[@]+"${EXTRA[@]}"} "$MAINF" >/dev/null 2>&1 || true ;;
-    --watch) EXTRA+=(-pvc) ;;
+    --watch) EXTRA+=(-pvc); [ -n "${LDC_IN_DOCKER:-}" ] && EXTRA+=(-view=none) ;;
     *) die "unknown option: $a" ;;
   esac
 done
@@ -31,7 +31,7 @@ PDF="$OUT/${MAINF%.tex}.pdf"
 
 # Missing file named in the log, e.g. "! LaTeX Error: File `cleveref.sty' not found."
 missing_file() {
-  sed -n "s/^! LaTeX Error: File \`\([^']*\)' not found.*/\1/p" "$LOG" 2>/dev/null | head -1
+  LC_ALL=C sed -n "s/^! LaTeX Error: File \`\([^']*\)' not found.*/\1/p" "$LOG" 2>/dev/null | head -1 || true
 }
 
 # Install the TeX Live package providing file $1. Returns 1 if it can't.
@@ -46,7 +46,12 @@ auto_install() {
   fi
   pkg="$(basename "$f")"; pkg="${pkg%.*}"
   info "missing $f; installing package '$pkg'"
-  if tlmgr install "$pkg" >/dev/null 2>&1 && kpsewhich "$f" >/dev/null; then return 0; fi
+  if tlmgr install "$pkg" 2>&1 | grep -q 'tlmgr itself needs to be updated'; then
+    info "updating tlmgr first"
+    tlmgr update --self >/dev/null 2>&1
+    tlmgr install "$pkg" >/dev/null 2>&1
+  fi
+  kpsewhich "$f" >/dev/null && return 0
   info "searching TeX Live for $f (can take a minute)"
   pkg="$(tlmgr_pkg_for_file "$f")"
   [ -n "$pkg" ] || { echo "No TeX Live package contains $f" >&2; return 1; }
@@ -58,9 +63,11 @@ info "building $DOC/$MAINF"
 mkdir -p "$OUT"
 installed=""
 while :; do
-  if latexmk ${EXTRA[@]+"${EXTRA[@]}"} "$MAINF" >"$OUT/.build-output.txt" 2>&1; then
+  # -g after an auto-install: sources didn't change, so latexmk must be forced to rerun.
+  FORCE=(); [ -n "$installed" ] && FORCE=(-g)
+  if latexmk ${EXTRA[@]+"${EXTRA[@]}"} ${FORCE[@]+"${FORCE[@]}"} "$MAINF" >"$OUT/.build-output.txt" 2>&1; then
     info "ok: $DOC/$PDF"
-    w=$(grep -c -E 'Warning' "$LOG" 2>/dev/null || true)
+    w=$(LC_ALL=C grep -c -E 'Warning' "$LOG" 2>/dev/null || true)
     [ "${w:-0}" -gt 0 ] && info "$w warning(s); see $DOC/$LOG"
     u=$(log_errors "$LOG")
     [ -n "$u" ] && printf '%s\n' "$u" >&2

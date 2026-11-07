@@ -1,0 +1,19 @@
+#!/bin/sh
+# Run any `make` target inside the Docker LaTeX image. No LaTeX install needed.
+#   ./dmake build D=docs/my-thesis
+#   ./dmake shell                 # a bash shell inside the container
+# The first run builds the image (a few minutes). Paths must be inside this repo.
+set -e
+cd "$(dirname "$0")"
+command -v docker >/dev/null || { echo "Docker is not installed: https://docs.docker.com/get-docker/" >&2; exit 1; }
+docker info >/dev/null 2>&1 || { echo "Docker is installed but not running. Start Docker Desktop and retry." >&2; exit 1; }
+
+LDC_UID=$(id -u); LDC_GID=$(id -g); export LDC_UID LDC_GID
+# Git identity for release tags made inside the container.
+n=$(git config user.name 2>/dev/null || true); e=$(git config user.email 2>/dev/null || true)
+[ -n "$n" ] && export GIT_AUTHOR_NAME="$n" GIT_COMMITTER_NAME="$n"
+[ -n "$e" ] && export GIT_AUTHOR_EMAIL="$e" GIT_COMMITTER_EMAIL="$e"
+
+TTY=""; [ -t 0 ] && [ -t 1 ] || TTY="-T"
+if [ "${1:-}" = shell ]; then exec docker compose run --rm $TTY tex bash; fi
+exec docker compose run --rm $TTY tex make "$@"

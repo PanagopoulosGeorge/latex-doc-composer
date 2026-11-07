@@ -21,3 +21,11 @@ lmodern.sty       lm
 float.sty         float
 hyperref.sty      hyperref
 makeidx.sty       latex
+colortbl.sty      colortbl
+nextpage.sty      nextpage
+english.ldf       babel-english
+# for \documentclass[greek]{thesis}
+greek.ldf         babel-greek
+lgrenc.def        greek-fontenc
+lgrenc.dfu        greek-inputenc
+grmn1000.tfm      cbfonts

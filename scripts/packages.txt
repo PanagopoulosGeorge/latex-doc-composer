@@ -1,0 +1,3 @@
+# Packages the scripts themselves need (not tied to a template).
+# file            tlmgr-package
+ulem.sty          ulem              # latexdiff underline/strikeout markup

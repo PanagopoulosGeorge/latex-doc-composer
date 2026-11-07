@@ -66,6 +66,7 @@
 \RequirePackage{losnotations}
 \RequirePackage{multicol}
 \if@thesisgreek
+  \RequirePackage[LGR,T1]{fontenc}   % Greek glyphs under pdflatex
   \RequirePackage[greek,english]{babel}
 \else
   \RequirePackage[english]{babel}

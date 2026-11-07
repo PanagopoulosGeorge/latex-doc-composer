@@ -1,0 +1,8 @@
+# Keep LF line endings even on Windows checkouts: these files run inside Linux
+# (Docker) or bash, where CRLF breaks them.
+* text=auto eol=lf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.pdf binary
+*.png binary
+*.jpg binary

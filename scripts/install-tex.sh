@@ -23,7 +23,7 @@ while [ $# -gt 0 ]; do
 done
 
 # tlmgr packages needed by the scripts and all templates
-PKGS="latexmk latexdiff $(cat "$REPO_ROOT"/templates/*/packages.txt | awk '!/^#/ && NF {print $2}' | sort -u | tr '\n' ' ')"
+PKGS="latexmk latexdiff makeindex $(cat "$REPO_ROOT"/scripts/packages.txt "$REPO_ROOT"/templates/*/packages.txt | awk '!/^#/ && NF {print $2}' | sort -u | tr '\n' ' ')"
 
 CMDS=()
 OS="$(uname -s)"

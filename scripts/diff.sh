@@ -75,7 +75,7 @@ mkdir -p "$DOC/diff"
 cp "$NAME.tex" "$DOC/diff/"
 if [ -f "build/$NAME.pdf" ]; then
   cp "build/$NAME.pdf" "$DOC/diff/"
-  if grep -q '^! ' "build/$NAME.log"; then
+  if LC_ALL=C grep -q '^! ' "build/$NAME.log"; then
     echo "warning: the diff compiled with errors (some markup may be off):" >&2
     log_errors "build/$NAME.log" >&2
   fi

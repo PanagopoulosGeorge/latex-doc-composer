@@ -1,0 +1,16 @@
+# Used by ./dmake and dmake.cmd. Direct use:
+#   docker compose run --rm tex make build D=docs/my-thesis
+services:
+  tex:
+    build: .
+    image: latex-doc-composer:latest
+    volumes:
+      - .:/work
+    working_dir: /work
+    # Linux: run as your user so created files aren't owned by root (./dmake sets these).
+    user: "${LDC_UID:-1000}:${LDC_GID:-1000}"
+    environment:
+      - GIT_AUTHOR_NAME
+      - GIT_AUTHOR_EMAIL
+      - GIT_COMMITTER_NAME
+      - GIT_COMMITTER_EMAIL

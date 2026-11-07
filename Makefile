@@ -8,7 +8,7 @@
 #   make check            make install-tex [PROFILE=basic|full]
 #   make templates        build every template (smoke test)
 
-S := scripts
+S := bash scripts
 
 .PHONY: help setup new build watch clean release diff check install-tex templates
 

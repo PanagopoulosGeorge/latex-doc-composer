@@ -74,17 +74,20 @@ fi
 if ! command -v pdflatex >/dev/null || ! command -v tlmgr >/dev/null; then
   if command -v pdflatex >/dev/null; then
     info "pdflatex found but no tlmgr (MiKTeX or a distro TeX?). Install missing packages with your package manager."
-    exec "$(dirname "$0")/check-tex.sh"
+    exec bash "$(dirname "$0")/check-tex.sh"
   fi
   install_tinytex
 else
   info "LaTeX found: $(tex --version | head -1) ($(kpsewhich -var-value TEXMFROOT))"
 fi
 
+# LDC_TEX_ONLY=1: stop after installing TeX (the Dockerfile caches this step).
+[ "${LDC_TEX_ONLY:-0}" = 1 ] && { info "TeX installed; skipping packages (LDC_TEX_ONLY=1)"; exit 0; }
+
 # 2. Missing tools and packages
 need=()
-for t in latexmk latexdiff; do command -v "$t" >/dev/null || need+=("$t"); done
-for f in "$REPO_ROOT"/templates/*/packages.txt; do
+for t in latexmk latexdiff makeindex; do command -v "$t" >/dev/null || need+=("$t"); done
+for f in "$REPO_ROOT"/scripts/packages.txt "$REPO_ROOT"/templates/*/packages.txt; do
   while read -r file pkg _; do
     case "$file" in ''|\#*) continue ;; esac
     kpsewhich "$file" >/dev/null 2>&1 || need+=("$pkg")
@@ -93,6 +96,9 @@ done
 if [ ${#need[@]} -gt 0 ]; then
   pkgs="$(printf '%s\n' "${need[@]}" | sort -u | tr '\n' ' ')"
   if tex_tree_writable; then
+    # tlmgr refuses to install anything while it is itself out of date.
+    info "updating tlmgr"
+    tlmgr update --self >/dev/null 2>&1 || tlmgr update --self
     info "installing: $pkgs"
     # shellcheck disable=SC2086
     tlmgr install $pkgs
@@ -115,4 +121,9 @@ if tb="$(tinytex_bin)"; then
   fi
 fi
 
-"$(dirname "$0")/check-tex.sh" >/dev/null && info "setup complete. Try: make new T=thesis N=my-thesis && make build D=docs/my-thesis"
+if out="$(bash "$(dirname "$0")/check-tex.sh" 2>&1)"; then
+  info "setup complete. Try: make new T=thesis N=my-thesis && make build D=docs/my-thesis"
+else
+  printf '%s\n' "$out" >&2
+  die "setup finished, but something is still missing (see above)"
+fi

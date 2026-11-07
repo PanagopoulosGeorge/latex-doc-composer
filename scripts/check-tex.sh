@@ -26,7 +26,7 @@ if command -v tex >/dev/null; then
 fi
 
 DIRS=("$@")
-[ ${#DIRS[@]} -eq 0 ] && for d in "$REPO_ROOT"/templates/*/; do DIRS+=("$d"); done
+[ ${#DIRS[@]} -eq 0 ] && for d in "$REPO_ROOT"/scripts "$REPO_ROOT"/templates/*/; do DIRS+=("$d"); done
 for d in "${DIRS[@]}"; do
   f="$d/packages.txt"; [ -f "$f" ] || continue
   n_before=${#missing_pkgs[@]}

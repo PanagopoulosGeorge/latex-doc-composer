@@ -30,7 +30,7 @@ if [ $INGIT = 1 ] && [ $TAG = 1 ]; then
   fi
 fi
 
-"$(dirname "$0")/build.sh" "$DOC"
+bash "$(dirname "$0")/build.sh" "$DOC"
 MAINF="$(find_main "$DOC")"
 OUT="$(out_dir_of "$DOC")"
 mkdir -p "$DOC/releases"
@@ -39,6 +39,10 @@ cp "$DOC/$OUT/${MAINF%.tex}.pdf" "$DEST"
 info "saved $DEST"
 
 if [ $INGIT = 1 ] && [ $TAG = 1 ]; then
-  git -C "$DOC" tag -a "$TAGNAME" -m "$NAME version $VER"
+  if git -C "$DOC" var GIT_COMMITTER_IDENT >/dev/null 2>&1; then
+    git -C "$DOC" tag -a "$TAGNAME" -m "$NAME version $VER"
+  else
+    git -C "$DOC" tag "$TAGNAME"   # no git name/email configured: plain tag
+  fi
   info "tagged $TAGNAME (local; push with: git push origin $TAGNAME)"
 fi
